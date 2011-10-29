@@ -13,7 +13,7 @@
 # Actions:
 # If ensure is set to 'present' the resource checks the existence of the file and download the artifact if needed.
 # If ensure is set to 'absent' the resource deleted the output file.
-# If ensure is not set, the artifact is re-downloaded.
+# If ensure is not set or set to 'update', the artifact is re-downloaded.
 #
 # Sample Usage:
 #  class nexus {
@@ -44,11 +44,11 @@ define nexus::artifact(
 	if $ensure == present {
 		exec { "Download ${gav}":
 			command => $cmd,
-			unless => '/bin/test -f ${output}'
+			unless  => '/bin/test -f ${output}'
 		}
 	} elsif $ensure == absent {
 		file { "Remove ${gav}":
-			path => $output,
+			path   => $output,
 			ensure => absent
 		}
 	} else {
