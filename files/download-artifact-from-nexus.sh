@@ -140,6 +140,4 @@ then
 fi
 
 echo "Fetching Artifact from $REDIRECT_URL..." >&2
-echo "Output $OUTPUT" >&2
-echo "Authentication $AUTHENTICATION" >&2
 curl -sS -L ${REDIRECT_URL} ${OUT} ${AUTHENTICATION} -v  --location-trusted
