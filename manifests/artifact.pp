@@ -34,7 +34,7 @@ define nexus::artifact(
 	include nexus
 	
 	if ($nexus::authentication) {
-		$args = "-u ${nexus::user} -p ${nexus::pwd}"
+		$args = "-u ${nexus::user} -p '${nexus::pwd}'"
 	} else {
 		$args = ""
 	}
@@ -46,17 +46,17 @@ define nexus::artifact(
 	$cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::NEXUS_URL} -r ${repository} -o ${output} $args -v"
 	
 	if $ensure == present {
-		exec { "Download ${gav}":
+		exec { "Download ${gav}-${classifier}":
 			command => $cmd,
-			unless  => '/bin/test -f ${output}'
+			unless  => "/bin/test -f ${output}"
 		}
 	} elsif $ensure == absent {
-		file { "Remove ${gav}":
+		file { "Remove ${gav}-${classifier}":
 			path   => $output,
 			ensure => absent
 		}
 	} else {
-		exec { "Download ${gav}":
+		exec { "Download ${gav}-${classifier}":
 			command => $cmd,
 		}
 	}
