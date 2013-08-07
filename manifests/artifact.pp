@@ -48,7 +48,7 @@ define nexus::artifact(
 	if $ensure == present {
 		exec { "Download ${gav}-${classifier}":
 			command => $cmd,
-			unless  => "/bin/test -f ${output}"
+			creates  => "${output}"
 		}
 	} elsif $ensure == absent {
 		file { "Remove ${gav}-${classifier}":
