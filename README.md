@@ -42,7 +42,8 @@ Usage
 		classifier => 'distribution',
 		packaging => 'zip',
 		repository => "public-snapshots",
-		output => "/tmp/distribution-web-0.3.0-SNAPSHOT.zip"
+		output => "/tmp/distribution-web-0.3.0-SNAPSHOT.zip",
+		timeout => 600
 	}
 
 License
