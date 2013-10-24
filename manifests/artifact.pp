@@ -9,6 +9,7 @@
 # [*repository*] : The repository such as 'public', 'central'...(mandatory)
 # [*output*] : The output file (mandatory)
 # [*ensure*] : If 'present' checks the existence of the output file (and downloads it if needed), if 'absent' deletes the output file, if not set redownload the artifact
+# [*timeout*] : Optional timeout for download exec. 0 disables - see exec for default.
 #
 # Actions:
 # If ensure is set to 'present' the resource checks the existence of the file and download the artifact if needed.
@@ -28,7 +29,8 @@ define nexus::artifact(
 	$classifier = "",
 	$repository,
 	$output,
-	$ensure = update
+	$ensure = update,
+	$timeout = undef
 	) {
 	
 	include nexus
@@ -48,7 +50,8 @@ define nexus::artifact(
 	if $ensure == present {
 		exec { "Download ${gav}-${classifier}":
 			command => $cmd,
-			creates  => "${output}"
+			creates  => "${output}",
+			timeout => $timeout
 		}
 	} elsif $ensure == absent {
 		file { "Remove ${gav}-${classifier}":
@@ -58,6 +61,7 @@ define nexus::artifact(
 	} else {
 		exec { "Download ${gav}-${classifier}":
 			command => $cmd,
+			timeout => $timeout
 		}
 	}
 }
