@@ -34,9 +34,9 @@ define nexus::artifact(
 	$output,
 	$ensure = update,
 	$timeout = undef,
-  $owner = undef,
-  $group = undef,
-  $mode = undef
+	$owner = undef,
+	$group = undef,
+	$mode = undef
 	) {
 	
 	include nexus
@@ -52,7 +52,15 @@ define nexus::artifact(
 	}
 
 	$cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::NEXUS_URL} -r ${repository} -o ${output} $args -v"
-	
+
+	if (($ensure != absent) and ($gav =~ /-SNAPSHOT/)) {
+		exec { "Checking ${gav}-${classifier}":
+			command => "${cmd} -z",
+			timeout => $timeout,
+			before => Exec["Download ${gav}-${classifier}"] 
+		}
+	}  
+
 	if $ensure == present {
 		exec { "Download ${gav}-${classifier}":
 			command => $cmd,

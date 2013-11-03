@@ -20,10 +20,11 @@ OPTIONS:
    -c    Artifact Classifier
    -e    Artifact Packaging
    -o    Output file
-   -r	 Repository
+   -r	   Repository
    -u    Username
-   -p	 Password
+   -p	   Password
    -n    Nexus Base URL
+   -z    if nexus has newer version of artifact, remove Output File and exit 
 
 EOF
 }
@@ -41,7 +42,7 @@ VERBOSE=0
 
 OUTPUT=
 
-while getopts "hva:c:e:o:r:u:p:n:" OPTION
+while getopts "hvza:c:e:o:r:u:p:n:" OPTION
 do
      case $OPTION in
          h)
@@ -65,6 +66,9 @@ do
              ;;
          v)
              VERBOSE=1
+             ;;
+         z)
+             SNAPSHOT_CHECK=1
              ;;
 		 o)
 			OUTPUT=$OPTARG
@@ -132,6 +136,18 @@ then
 	AUTHENTICATION="-u $USERNAME:$PASSWORD"
 fi
 
+ 
+if [[ "$SNAPSHOT_CHECK" != "" ]]
+then
+  # remove $OUTPUT if nexus has newer version
+  if [[ -f $OUTPUT ]] && [[ "$(curl -s -L ${REDIRECT_URL} ${AUTHENTICATION} -I --location-trusted -z $OUTPUT -o /dev/null -w '%{http_code}' )" == "200" ]]
+  then 
+    echo "Nexus has newer version of $GROUP_ID:$ARTIFACT_ID:$VERSION" 
+    rm $OUTPUT
+  fi 
+  exit 0
+fi
+
 # Output
 OUT=
 if [[ "$OUTPUT" != "" ]] 
@@ -140,4 +156,4 @@ then
 fi
 
 echo "Fetching Artifact from $REDIRECT_URL..." >&2
-curl -sS -L ${REDIRECT_URL} ${OUT} ${AUTHENTICATION} -v  --location-trusted --fail
+curl -sS -L ${REDIRECT_URL} ${OUT} ${AUTHENTICATION} -v -R --location-trusted --fail  
