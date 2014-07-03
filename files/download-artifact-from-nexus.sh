@@ -140,7 +140,7 @@ fi
 if [[ "$SNAPSHOT_CHECK" != "" ]]
 then
   # remove $OUTPUT if nexus has newer version
-  if [[ -f $OUTPUT ]] && [[ "$(curl -s -L ${REDIRECT_URL} ${AUTHENTICATION} -I --location-trusted -z $OUTPUT -o /dev/null -w '%{http_code}' )" == "200" ]]
+  if [[ -f $OUTPUT ]] && [[ "$(curl -s ${REDIRECT_URL} ${AUTHENTICATION} -I --location-trusted -z $OUTPUT -o /dev/null -w '%{http_code}' )" == "200" ]]
   then 
     echo "Nexus has newer version of $GROUP_ID:$ARTIFACT_ID:$VERSION" 
     rm $OUTPUT
@@ -156,4 +156,4 @@ then
 fi
 
 echo "Fetching Artifact from $REDIRECT_URL..." >&2
-curl -sS -L ${REDIRECT_URL} ${OUT} ${AUTHENTICATION} -v -R --location-trusted --fail  
+curl -sS ${REDIRECT_URL} ${OUT} ${AUTHENTICATION} -v -R --location-trusted --fail  
