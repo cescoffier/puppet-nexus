@@ -62,18 +62,18 @@ define nexus::artifact(
 	}  
 
 	if $ensure == present {
-		exec { "Download ${gav}-${classifier}":
+		exec { "Download ${name}":
 			command => $cmd,
 			creates  => "${output}",
 			timeout => $timeout
 		}
 	} elsif $ensure == absent {
-		file { "Remove ${gav}-${classifier}":
+		file { "Remove ${name}":
 			path   => $output,
 			ensure => absent
 		}
 	} else {
-		exec { "Download ${gav}-${classifier}":
+		exec { "Download ${name}":
 			command => $cmd,
 			timeout => $timeout
 		}
@@ -82,7 +82,7 @@ define nexus::artifact(
     if $ensure != absent {
       file { "${output}":
         ensure => file,
-        require => Exec["Download ${gav}-${classifier}"],
+        require => Exec["Download ${name}"],
         owner => $owner,
         group => $group,
         mode => $mode
