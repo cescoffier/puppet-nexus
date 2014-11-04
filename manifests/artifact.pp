@@ -20,10 +20,7 @@
 # If ensure is not set or set to 'update', the artifact is re-downloaded.
 #
 # Sample Usage:
-#  class nexus {
-#   url => http://edge.spree.de/nexus,
-#   username => user,
-#   password => password
+#  class nexus:artifact {
 # }
 #
 define nexus::artifact(
