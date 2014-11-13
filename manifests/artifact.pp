@@ -45,18 +45,18 @@ define nexus::artifact(
 	}
 
 	if ($classifier) {
-		$includeClass = "-c ${classifier}"	
+		$includeClass = "-c ${classifier}"
 	}
 
 	$cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::NEXUS_URL} -r ${repository} -o ${output} $args -v"
 
 	if (($ensure != absent) and ($gav =~ /-SNAPSHOT/)) {
-		exec { "Checking ${gav}-${classifier}":
+		exec { "Checking ${name}":
 			command => "${cmd} -z",
 			timeout => $timeout,
-			before => Exec["Download ${gav}-${classifier}"] 
+			before => Exec["Download ${name}"]
 		}
-	}  
+	}
 
 	if $ensure == present {
 		exec { "Download ${name}":
@@ -76,14 +76,14 @@ define nexus::artifact(
 		}
 	}
 
-    if $ensure != absent {
-      file { "${output}":
-        ensure => file,
-        require => Exec["Download ${name}"],
-        owner => $owner,
-        group => $group,
-        mode => $mode
-      }
-    }
+	if $ensure != absent {
+		file { "${output}":
+			ensure => file,
+			require => Exec["Download ${name}"],
+			owner => $owner,
+			group => $group,
+			mode => $mode
+		}
+	}
 
 }
