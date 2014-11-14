@@ -50,6 +50,15 @@ file { "/opt/nexus-script/download-artifact-from-nexus.sh":
 		require  => [File["/opt/nexus-script"]]
 }
 
+package { "dos2unix":
+  ensure => installed,  
+}
+
+exec { "line-endings":
+  command => "dos2unix /opt/nexus-script/download-artifact-from-nexus.sh",
+  require => [ Package["dos2unix"], File ["/opt/nexus-script/download-artifact-from-nexus.sh"] ]
+}
+
 file { "/opt/nexus-script":
 	ensure => directory
 }	

@@ -54,7 +54,7 @@ define nexus::artifact(
 		exec { "Checking ${gav}-${classifier}":
 			command => "${cmd} -z",
 			timeout => $timeout,
-			before => Exec["Download ${gav}-${classifier}"] 
+			before => Exec["Download ${name}"] 
 		}
 	}  
 
