@@ -39,17 +39,15 @@ define nexus::artifact (
 
   include nexus
 
-  if ($nexus::authentication) {
-    $args = "-u ${nexus::user} -p '${nexus::pwd}'"
-  } else {
-    $args = ''
+  if($nexus::username and $nexus::password) {
+    $args = "-u ${nexus::username} -p '${nexus::password}'"
   }
 
   if ($classifier) {
     $includeClass = "-c ${classifier}"
   }
 
-  $cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::NEXUS_URL} -r ${repository} -o ${output} ${args} -v"
+  $cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::url} -r ${repository} -o ${output} ${args} -v"
 
   if (($ensure != absent) and ($gav =~ /-SNAPSHOT/)) {
     exec { "Checking ${gav}-${classifier}":

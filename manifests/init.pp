@@ -18,29 +18,16 @@
 #}
 #
 class nexus (
-  $url = '',
-  $username = '',
-  $password = ''
+  $url,
+  $username = undef,
+  $password = undef,
 ) {
 
   # Check arguments
-  # url mandatory
-  if $url == '' {
-    fail('Cannot initialize the Nexus class - the url parameter is mandatory')
-  }
+  $nexus_url = $url
 
-  $NEXUS_URL = $url
-
-  if ($username != '') and ($password == '') {
+  if((!$username and $password) or ($username and !$password)) {
     fail('Cannot initialize the Nexus class - both username and password must be set')
-  } elsif ($username == '') and ($password != '') {
-    fail('Cannot initialize the Nexus class - both username and password must be set')
-  } elsif ($username == '') and ($password == '') {
-    $authentication = false
-  } else {
-    $authentication = true
-    $user = $username
-    $pwd = $password
   }
 
   # Install script
