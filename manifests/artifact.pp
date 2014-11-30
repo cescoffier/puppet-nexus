@@ -26,10 +26,10 @@
 #
 define nexus::artifact (
   $gav,
-  $packaging  = "jar",
-  $classifier = "",
   $repository,
   $output,
+  $packaging  = 'jar',
+  $classifier = '',
   $ensure     = update,
   $timeout    = undef,
   $owner      = undef,
@@ -42,48 +42,48 @@ define nexus::artifact (
   if ($nexus::authentication) {
     $args = "-u ${nexus::user} -p '${nexus::pwd}'"
   } else {
-    $args = ""
+    $args = ''
   }
 
   if ($classifier) {
     $includeClass = "-c ${classifier}"
   }
 
-  $cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::NEXUS_URL} -r ${repository} -o ${output} $args -v"
+  $cmd = "/opt/nexus-script/download-artifact-from-nexus.sh -a ${gav} -e ${packaging} ${$includeClass} -n ${nexus::NEXUS_URL} -r ${repository} -o ${output} ${args} -v"
 
   if (($ensure != absent) and ($gav =~ /-SNAPSHOT/)) {
     exec { "Checking ${gav}-${classifier}":
       command => "${cmd} -z",
       timeout => $timeout,
-      before  => Exec["Download ${name}"]
+      before  => Exec["Download ${name}"],
     }
   }
 
   if $ensure == present {
     exec { "Download ${name}":
       command => $cmd,
-      creates => "${output}",
-      timeout => $timeout
+      creates => $output,
+      timeout => $timeout,
     }
   } elsif $ensure == absent {
     file { "Remove ${name}":
+      ensure => absent,
       path   => $output,
-      ensure => absent
     }
   } else {
     exec { "Download ${name}":
       command => $cmd,
-      timeout => $timeout
+      timeout => $timeout,
     }
   }
 
   if $ensure != absent {
-    file { "${output}":
+    file { $output:
       ensure  => file,
       require => Exec["Download ${name}"],
       owner   => $owner,
       group   => $group,
-      mode    => $mode
+      mode    => $mode,
     }
   }
 

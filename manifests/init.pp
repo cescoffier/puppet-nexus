@@ -18,24 +18,24 @@
 #}
 #
 class nexus (
-  $url = "",
-  $username = "",
-  $password = ""
+  $url = '',
+  $username = '',
+  $password = ''
 ) {
 
   # Check arguments
   # url mandatory
-  if $url == "" {
-    fail("Cannot initialize the Nexus class - the url parameter is mandatory")
+  if $url == '' {
+    fail('Cannot initialize the Nexus class - the url parameter is mandatory')
   }
 
   $NEXUS_URL = $url
 
-  if ($username != "") and ($password == "") {
-    fail("Cannot initialize the Nexus class - both username and password must be set")
-  } elsif ($username == "") and ($password != "") {
-    fail("Cannot initialize the Nexus class - both username and password must be set")
-  } elsif ($username == "") and ($password == "") {
+  if ($username != '') and ($password == '') {
+    fail('Cannot initialize the Nexus class - both username and password must be set')
+  } elsif ($username == '') and ($password != '') {
+    fail('Cannot initialize the Nexus class - both username and password must be set')
+  } elsif ($username == '') and ($password == '') {
     $authentication = false
   } else {
     $authentication = true
@@ -44,22 +44,22 @@ class nexus (
   }
 
   # Install script
-  file { "/opt/nexus-script/download-artifact-from-nexus.sh":
+  file { '/opt/nexus-script/download-artifact-from-nexus.sh':
     ensure  => file,
-    owner   => "root",
-    mode    => "0755",
-    source  => "puppet:///modules/nexus/download-artifact-from-nexus.sh",
-    require => File["/opt/nexus-script"]
+    owner   => 'root',
+    mode    => '0755',
+    source  => 'puppet:///modules/nexus/download-artifact-from-nexus.sh',
+    require => File['/opt/nexus-script']
   }
 
-  package { "dos2unix": ensure => installed, }
+  package { 'dos2unix': ensure => installed, }
 
-  exec { "line-endings":
+  exec { 'line-endings':
     path    => '/bin:/usr/bin:/sbin',
-    command => "dos2unix /opt/nexus-script/download-artifact-from-nexus.sh",
-    require => [Package["dos2unix"], File["/opt/nexus-script/download-artifact-from-nexus.sh"]]
+    command => 'dos2unix /opt/nexus-script/download-artifact-from-nexus.sh',
+    require => [Package['dos2unix'], File['/opt/nexus-script/download-artifact-from-nexus.sh']]
   }
 
-  file { "/opt/nexus-script": ensure => directory }
+  file { '/opt/nexus-script': ensure => directory }
 
 }
