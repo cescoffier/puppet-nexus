@@ -52,14 +52,6 @@ class nexus (
     require => File['/opt/nexus-script']
   }
 
-  package { 'dos2unix': ensure => installed, }
-
-  exec { 'line-endings':
-    path    => '/bin:/usr/bin:/sbin',
-    command => 'dos2unix /opt/nexus-script/download-artifact-from-nexus.sh',
-    require => [Package['dos2unix'], File['/opt/nexus-script/download-artifact-from-nexus.sh']]
-  }
-
   file { '/opt/nexus-script': ensure => directory }
 
 }
