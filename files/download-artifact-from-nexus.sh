@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
 
 # Define Nexus Configuration
 NEXUS_BASE=
@@ -39,10 +40,11 @@ REPO=
 USERNAME=
 PASSWORD=
 VERBOSE=0
+SNAPSHOT_CHECK=
 
 OUTPUT=
 
-while getopts "hvza:c:e:o:r:u:p:n:" OPTION
+while getopts ":hvza:c:e:o:r:u:p:n:" OPTION
 do
      case $OPTION in
          h)
@@ -86,7 +88,7 @@ do
 			NEXUS_BASE=$OPTARG
 			;;
          ?)
-             echo "Illegal argument $OPTION=$OPTARG" >&2
+             echo "Illegal argument: -${OPTARG:-}" >&2
              usage
              exit
              ;;
@@ -103,7 +105,7 @@ fi
 # Define default values for optional components
 
 # If we don't have set a repository and the version requested is a SNAPSHOT use snapshots, otherwise use releases
-if [[ "$REPOSITORY" == "" ]]
+if [[ "$REPO" == "" ]]
 then
 	if [[ "$VERSION" =~ ".*SNAPSHOT" ]]
 	then
@@ -121,7 +123,7 @@ PARAM_VALUES=( $GROUP_ID $ARTIFACT_ID $VERSION $REPO $PACKAGING $CLASSIFIER )
 PARAMS=""
 for index in ${!PARAM_KEYS[*]} 
 do
-  if [[ ${PARAM_VALUES[$index]} != "" ]]
+  if [[ ${PARAM_VALUES[$index]:-} != "" ]]
   then
     PARAMS="${PARAMS}${PARAM_KEYS[$index]}=${PARAM_VALUES[$index]}&"
   fi
