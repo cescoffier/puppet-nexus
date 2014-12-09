@@ -40,6 +40,7 @@ REPO=
 USERNAME=
 PASSWORD=
 VERBOSE=0
+SNAPSHOT_CHECK=
 
 OUTPUT=
 
@@ -104,7 +105,7 @@ fi
 # Define default values for optional components
 
 # If we don't have set a repository and the version requested is a SNAPSHOT use snapshots, otherwise use releases
-if [[ "$REPOSITORY" == "" ]]
+if [[ "$REPO" == "" ]]
 then
 	if [[ "$VERSION" =~ ".*SNAPSHOT" ]]
 	then
@@ -122,7 +123,7 @@ PARAM_VALUES=( $GROUP_ID $ARTIFACT_ID $VERSION $REPO $PACKAGING $CLASSIFIER )
 PARAMS=""
 for index in ${!PARAM_KEYS[*]} 
 do
-  if [[ ${PARAM_VALUES[$index]} != "" ]]
+  if [[ ${PARAM_VALUES[$index]:-} != "" ]]
   then
     PARAMS="${PARAMS}${PARAM_KEYS[$index]}=${PARAM_VALUES[$index]}&"
   fi
