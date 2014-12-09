@@ -44,7 +44,7 @@ SNAPSHOT_CHECK=
 
 OUTPUT=
 
-while getopts "hvza:c:e:o:r:u:p:n:" OPTION
+while getopts ":hvza:c:e:o:r:u:p:n:" OPTION
 do
      case $OPTION in
          h)
@@ -88,7 +88,7 @@ do
 			NEXUS_BASE=$OPTARG
 			;;
          ?)
-             echo "Illegal argument $OPTION=$OPTARG" >&2
+             echo "Illegal argument: -${OPTARG:-}" >&2
              usage
              exit
              ;;
