@@ -41,6 +41,8 @@ define nexus::artifact (
 
   if($nexus::username and $nexus::password) {
     $args = "-u ${nexus::username} -p '${nexus::password}'"
+  } elsif ($nexus::netrc) {
+    $args = "-m"
   }
 
   if ($classifier) {

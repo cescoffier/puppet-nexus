@@ -24,6 +24,7 @@ OPTIONS:
    -u    Username
    -p	   Password
    -n    Nexus Base URL
+   -m    Use .netrc
    -z    if nexus has newer version of artifact, remove Output File and exit 
 
 EOF
@@ -39,10 +40,10 @@ REPO=
 USERNAME=
 PASSWORD=
 VERBOSE=0
-
+NETRC=
 OUTPUT=
 
-while getopts "hvza:c:e:o:r:u:p:n:" OPTION
+while getopts "hvza:c:e:o:r:u:p:n:m" OPTION
 do
      case $OPTION in
          h)
@@ -63,6 +64,9 @@ do
              ;;
          e)
              PACKAGING=$OPTARG
+             ;;
+         m)
+             NETRC=1
              ;;
          v)
              VERBOSE=1
@@ -136,6 +140,10 @@ then
 	AUTHENTICATION="-u $USERNAME:$PASSWORD"
 fi
 
+if [[ "$NETRC" == "1" ]]
+then
+	AUTHENTICATION="-n"
+fi
  
 if [[ "$SNAPSHOT_CHECK" != "" ]]
 then
