@@ -105,7 +105,7 @@ fi
 # If we don't have set a repository and the version requested is a SNAPSHOT use snapshots, otherwise use releases
 if [[ "$REPOSITORY" == "" ]]
 then
-	if [[ "$VERSION" =~ ".*SNAPSHOT" ]]
+	if [[ "$VERSION" == *SNAPSHOT ]]
 	then
 		: ${REPO:="snapshots"}
 	else
