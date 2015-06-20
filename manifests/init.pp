@@ -6,6 +6,7 @@
 # [*url*] : The Nexus base url (mandatory)
 # [*username*] : The username used to connect to nexus
 # [*password*] : The password used to connect to nexus
+# [*netrc*] : Use .netrc to connect to nexus
 #
 # Actions:
 # Checks and intialized the Nexus support.
@@ -21,6 +22,7 @@ class nexus (
   $url,
   $username = undef,
   $password = undef,
+  $netrc = undef,
 ) {
 
   # Check arguments
