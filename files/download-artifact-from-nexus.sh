@@ -107,6 +107,10 @@ if [[ "$REPOSITORY" == "" ]]
 then
 	if [[ "$VERSION" =~ ".*SNAPSHOT" ]]
 	then
+		if [[ $VERSION == "LATEST-SNAPSHOT" ]]
+		then
+			VERSION=LATEST
+		fi
 		: ${REPO:="snapshots"}
 	else
 		: ${REPO:="releases"}
