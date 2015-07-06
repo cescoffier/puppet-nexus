@@ -29,7 +29,7 @@ define nexus::artifact (
   $repository,
   $output,
   $packaging  = 'jar',
-  $classifier = '',
+  $classifier = undef,
   $ensure     = update,
   $timeout    = undef,
   $owner      = undef,
@@ -42,10 +42,10 @@ define nexus::artifact (
   if($nexus::username and $nexus::password) {
     $args = "-u ${nexus::username} -p '${nexus::password}'"
   } elsif ($nexus::netrc) {
-    $args = "-m"
+    $args = '-m'
   }
 
-  if ($classifier) {
+  if ($classifier!=undef) {
     $includeClass = "-c ${classifier}"
   }
 
