@@ -36,6 +36,7 @@ class nexus (
   file { '/opt/nexus-script/download-artifact-from-nexus.sh':
     ensure  => file,
     owner   => 'root',
+    group   => 'root',
     mode    => '0755',
     source  => 'puppet:///modules/nexus/download-artifact-from-nexus.sh',
     require => File['/opt/nexus-script']
